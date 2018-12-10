@@ -4,7 +4,7 @@ const result = require('../utils/result')
 const token = require('../utils/token')
 
 module.exports = {
-  async saveInfo(tokenInput, info, functionName, userId) {
+  async saveInfo(tokenInput, info, functionName, userId, isAdminConsidered = false) {
    let outputResult = new result()
    try {
      const tokenData = token.verify(tokenInput)
@@ -12,7 +12,10 @@ module.exports = {
        outputResult.setErrorCode(403).setMessage('Authentication failed');
        return outputResult;
      }
-     let params = userId? [parseInt(tokenData.userId), userId, ...info]:[null, parseInt(tokenData.userId), ...info]
+     let params = isAdminConsidered?
+     userId? [parseInt(tokenData.userId), userId, ...info]
+     : [null, parseInt(tokenData.userId), ...info]
+     : [parseInt(tokenData.userId), ...info]
      console.log('functionName:', functionName, 'params:', params);
      let dbOutput = await dbConnect.func(functionName, params);
      console.log('dbOutput', dbOutput);
