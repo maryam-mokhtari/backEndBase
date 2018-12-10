@@ -1,7 +1,7 @@
-module.exports = {
-  finalize(result, res) {
-    result.validateResultForOutput();
-    res.status(result.status)
-    res.send(result);
-  }
+const finalize = function(result, res) {
+  result.validateResultForOutput()
+  res.status(result.status)
+  res.send(result)
 }
+
+module.exports = finalize
