@@ -1,5 +1,4 @@
 const dbConnect = require('../utils/dbConnect')
-const util = require('../utils/routerUtils')
 const log = require('../log').log
 const result = require('../utils/result')
 const token = require('../utils/token')
