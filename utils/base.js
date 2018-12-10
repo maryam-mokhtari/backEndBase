@@ -40,7 +40,7 @@ module.exports = {
    return outputResult;
  },
 
- async getInfo(tokenInput, functionName, userId) {
+ async getInfo(tokenInput, functionName, userId, isAdminConsidered = false) {
    console.log('getInfo:', tokenInput, functionName, userId);
    let outputResult = new result()
    try {
@@ -54,7 +54,9 @@ module.exports = {
        outputResult.setErrorCode(403).setMessage('Permission denied');
        return outputResult;
      }
-     let params = userId? [parseInt(tokenData.userId), parseInt(userId)]:[null, parseInt(tokenData.userId)]
+     let params = isAdminConsidered? userId? [parseInt(tokenData.userId), parseInt(userId)]
+     : [null, parseInt(tokenData.userId)]
+     : [parseInt(tokenData.userId)]
      console.log('params:', params);
      let dbOutput = await dbConnect.func(functionName, params);
      console.log('dbOutput:', dbOutput);
