@@ -44,20 +44,24 @@ module.exports = {
    console.log('getInfo:', tokenInput, functionName, userId);
    let outputResult = new result()
    try {
-     const tokenData = token.verify(tokenInput)
-     console.log('tokenData:', tokenData, );
-     if (!tokenData) {
-       outputResult.setErrorCode(403).setMessage('Authentication failed');
-       return outputResult;
+     let tokenData;
+     if (tokenInput) {
+       tokenData = token.verify(tokenInput)
+       console.log('tokenData:', tokenData, );
+       if (!tokenData) {
+         outputResult.setErrorCode(403).setMessage('Authentication failed');
+         return outputResult;
+       }
+       if (userId && !tokenData.rolename.includes('admin')) {
+         outputResult.setErrorCode(403).setMessage('Permission denied');
+         return outputResult;
+       }
      }
-     if (userId && !tokenData.rolename.includes('admin')) {
-       outputResult.setErrorCode(403).setMessage('Permission denied');
-       return outputResult;
-     }
-     let params = isAdminConsidered? userId? [parseInt(tokenData.userId), parseInt(userId)]
+     let params = tokenInput? isAdminConsidered? userId? [parseInt(tokenData.userId), parseInt(userId)]
      : [null, parseInt(tokenData.userId)]
      : [parseInt(tokenData.userId)]
-     console.log('params:', params);
+     : []
+     console.log('functionName:', functionName, 'params:', params);
      let dbOutput = await dbConnect.func(functionName, params);
      console.log('dbOutput:', dbOutput);
      outputResult.setCode(0).setData(dbOutput).setMessage('OK')
