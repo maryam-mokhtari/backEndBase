@@ -4,7 +4,7 @@
 const initOptions = {
   user: 'postgres',
   host: '127.0.0.1',
-  database: 'User',
+  database: 'Finance',
   password: '123',
   port: 5432,
   min: 10,

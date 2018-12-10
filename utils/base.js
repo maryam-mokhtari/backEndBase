@@ -67,7 +67,7 @@ module.exports = {
      outputResult.setCode(0).setData(dbOutput).setMessage('OK')
    } catch (ex) {
      outputResult.setErrorCode(-1).setMessage(ex.message);
-     log.error(`getUserIno exception, ${ex.message}`);
+     log.error(`getInfo exception, ${ex.message}`);
    }
    return outputResult;
  }
