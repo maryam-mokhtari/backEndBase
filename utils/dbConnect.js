@@ -4,7 +4,7 @@
 const initOptions = {
   user: 'postgres',
   host: '127.0.0.1',
-  database: 'Finance',
+  database: process.env.TRIPEMA_DB,
   password: '123',
   port: 5432,
   min: 10,
