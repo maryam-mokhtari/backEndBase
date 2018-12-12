@@ -40,8 +40,9 @@ module.exports = {
    return outputResult;
  },
 
- async getInfo(tokenInput, functionName, userId, isAdminConsidered = false) {
-   console.log('getInfo:', tokenInput, functionName, userId);
+ async getInfo(tokenInput, functionName, userId, isAdminConsidered = false, info) {
+   console.log('getInfo:', tokenInput, functionName, userId, info);
+   // console.log('getInfo: 1.t:', tokenInput, '2.f:', functionName, '3.u:', userId, '4.is:', isAdminConsidered, '5.i:', info);
    let outputResult = new result()
    try {
      let tokenData;
@@ -59,7 +60,7 @@ module.exports = {
      }
      let params = tokenInput? isAdminConsidered? userId? [parseInt(tokenData.userId), parseInt(userId)]
      : [null, parseInt(tokenData.userId)]
-     : [parseInt(tokenData.userId)]
+     : info? [parseInt(tokenData.userId), ...info]:[parseInt(tokenData.userId)]
      : []
      console.log('functionName:', functionName, 'params:', params);
      let dbOutput = await dbConnect.func(functionName, params);
