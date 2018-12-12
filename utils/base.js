@@ -31,7 +31,7 @@ module.exports = {
        outputResult.setErrorCode(2001).setMessage('Input format invalid');
        return outputResult
      }
-     outputResult.setCode(0).setData([{userId: tokenData.userId}]).setMessage('OK')
+     outputResult.setCode(0).setData([{userId: tokenData.userId, output: dbOutput[0][functionName] }]).setMessage('OK')
      return outputResult
    } catch (ex) {
      outputResult.setErrorCode(-1).setMessage(ex.message);
