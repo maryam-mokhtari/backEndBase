@@ -5,7 +5,7 @@ const token = require('../utils/token')
 const {finalize} = require('base')
 
 const getInfoBase = async function(functionName, tokenInput, info, isAdminConsidered, userId) {
-  console.log('getInfo:', tokenInput, functionName, userId, info);
+  console.log('getInfoBase:', functionName, tokenInput, info, isAdminConsidered, userId);
   let outputResult = new result()
   try {
     let tokenData;
@@ -73,7 +73,8 @@ module.exports = {
    return outputResult;
  },
  async getInfo(res, ...args) {
-   const result = getInfoBase(...args)
+   const result = getInfoBase(...args);
+   console.log('getInfo:', result, finalize);
    finalize(result, res)
  },
 }
