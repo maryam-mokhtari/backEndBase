@@ -36,7 +36,7 @@ const getInfoBase = async function(functionName, tokenInput, info, isAdminConsid
   return outputResult;
 }
 
-const saveInfo = async function(functionName, tokenInput, info, isAdminConsidered, userId) {
+const saveInfoBase = async function(functionName, tokenInput, info, isAdminConsidered, userId) {
  let outputResult = new result()
  try {
    const tokenData = token.verify(tokenInput)
