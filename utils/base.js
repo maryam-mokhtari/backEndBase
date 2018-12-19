@@ -40,9 +40,8 @@ module.exports = {
    return outputResult;
  },
 
- async getInfo(tokenInput, functionName, userId, isAdminConsidered = false, info) {
+ async getInfo(functionName, tokenInput, info, isAdminConsidered, userId) {
    console.log('getInfo:', tokenInput, functionName, userId, info);
-   // console.log('getInfo: 1.t:', tokenInput, '2.f:', functionName, '3.u:', userId, '4.is:', isAdminConsidered, '5.i:', info);
    let outputResult = new result()
    try {
      let tokenData;
