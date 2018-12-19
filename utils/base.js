@@ -36,45 +36,50 @@ const getInfoBase = async function(functionName, tokenInput, info, isAdminConsid
   return outputResult;
 }
 
-module.exports = {
-  async saveInfo(tokenInput, info, functionName, userId, isAdminConsidered = false) {
-   let outputResult = new result()
-   try {
-     const tokenData = token.verify(tokenInput)
-     if (!tokenData) {
-       outputResult.setErrorCode(403).setMessage('Authentication failed');
-       return outputResult;
-     }
-     let params = isAdminConsidered?
-     userId? [parseInt(tokenData.userId), userId, ...info]
-     : [null, parseInt(tokenData.userId), ...info]
-     : [parseInt(tokenData.userId), ...info]
-     console.log('functionName:', functionName, 'params:', params);
-     let dbOutput = await dbConnect.func(functionName, params);
-     console.log('dbOutput', dbOutput);
-     if (dbOutput[0][functionName] == -1) {
-       outputResult.setErrorCode(403).setMessage('Permission denied');
-       return outputResult
-     }
-     if (dbOutput[0][functionName] == null) {
-       outputResult.setErrorCode(2001).setMessage('No query result');
-       return outputResult
-     }
-     if (dbOutput[0][functionName] == -2) {
-       outputResult.setErrorCode(2001).setMessage('Input format invalid');
-       return outputResult
-     }
-     outputResult.setCode(0).setData([{userId: tokenData.userId, output: dbOutput[0][functionName] }]).setMessage('OK')
-     return outputResult
-   } catch (ex) {
-     outputResult.setErrorCode(-1).setMessage(ex.message);
-     log.error(`${functionName} exception, ${ex.message}`);
+const saveInfo = async function(functionName, tokenInput, info, isAdminConsidered, userId) {
+ let outputResult = new result()
+ try {
+   const tokenData = token.verify(tokenInput)
+   if (!tokenData) {
+     outputResult.setErrorCode(403).setMessage('Authentication failed');
+     return outputResult;
    }
-   return outputResult;
- },
+   let params = isAdminConsidered?
+   userId? [parseInt(tokenData.userId), userId, ...info]
+   : [null, parseInt(tokenData.userId), ...info]
+   : [parseInt(tokenData.userId), ...info]
+   console.log('functionName:', functionName, 'params:', params);
+   let dbOutput = await dbConnect.func(functionName, params);
+   console.log('dbOutput', dbOutput);
+   if (dbOutput[0][functionName] == -1) {
+     outputResult.setErrorCode(403).setMessage('Permission denied');
+     return outputResult
+   }
+   if (dbOutput[0][functionName] == null) {
+     outputResult.setErrorCode(2001).setMessage('No query result');
+     return outputResult
+   }
+   if (dbOutput[0][functionName] == -2) {
+     outputResult.setErrorCode(2001).setMessage('Input format invalid');
+     return outputResult
+   }
+   outputResult.setCode(0).setData([{userId: tokenData.userId, output: dbOutput[0][functionName] }]).setMessage('OK')
+   return outputResult
+ } catch (ex) {
+   outputResult.setErrorCode(-1).setMessage(ex.message);
+   log.error(`${functionName} exception, ${ex.message}`);
+ }
+ return outputResult;
+}
+module.exports = {
  async getInfo(res, ...args) {
    const result = await getInfoBase(...args);
    console.log('getInfo:', result, finalize);
    finalize(result, res)
  },
+  async saveInfo(res, ...args) {
+    const result = await saveInfoBase(...args);
+    console.log('saveInfo:', result, finalize);
+    finalize(result, res)
+  },
 }
