@@ -2,6 +2,7 @@ const dbConnect = require('../utils/dbConnect')
 const log = require('../log').log
 const result = require('../utils/result')
 const token = require('../utils/token')
+const {finalize} = require('base')
 
 module.exports = {
   async saveInfo(tokenInput, info, functionName, userId, isAdminConsidered = false) {
@@ -39,8 +40,11 @@ module.exports = {
    }
    return outputResult;
  },
-
- async getInfo(functionName, tokenInput, info, isAdminConsidered, userId) {
+ async getInfo(res, ...args) {
+   const result = getInfoBase(...args)
+   finalize(result, res)
+ },
+ async getInfoBase(functionName, tokenInput, info, isAdminConsidered, userId) {
    console.log('getInfo:', tokenInput, functionName, userId, info);
    let outputResult = new result()
    try {
